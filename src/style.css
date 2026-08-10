@@ -216,6 +216,13 @@ h1{
   .stats{grid-template-columns:repeat(2,1fr);}
 }
 
+.map-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  min-width:0;
+}
+
 .map-wrap{
   background:var(--panel-2);
   border:1px solid var(--line);
@@ -307,6 +314,76 @@ h1{
 }
 .tooltip.show{opacity:1;}
 .tooltip .co{color:var(--muted-2);margin-left:6px;}
+
+/* ---------- official sources ---------- */
+.sources-panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+}
+.sources-head{
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted-2);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:4px 10px;
+}
+.sources-note{
+  font-family:var(--font-body);
+  text-transform:none;
+  letter-spacing:normal;
+  font-size:11.5px;
+  color:var(--muted);
+}
+.sources-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
+@media (max-width:720px){
+  .sources-grid{grid-template-columns:1fr;}
+  .source-group{border-right:none !important;border-bottom:1px solid var(--line);}
+  .source-group:last-child{border-bottom:none;}
+}
+.source-group{
+  padding:12px 14px;
+  border-right:1px solid var(--line);
+}
+.source-group:last-child{border-right:none;}
+.group-title{
+  font-family:var(--font-mono);
+  font-size:10.5px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--muted-2);
+  margin-bottom:8px;
+}
+.source-group ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.source-group li{font-size:12.5px;line-height:1.4;}
+.source-group a{
+  color:var(--ink);
+  text-decoration:none;
+  border-bottom:1px dotted var(--line-strong);
+}
+.source-group a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+.source-group .tag{
+  display:block;
+  font-size:11px;
+  color:var(--muted-2);
+  margin-top:1px;
+}
 
 /* ---------- sidebar manifest ---------- */
 .manifest{

@@ -22,15 +22,58 @@
       </div>
 
       <div class="layout">
-        <div class="map-wrap">
-          <svg id="map" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="World map with pins marking Musk company land holdings. Scroll or pinch to zoom, drag to pan."></svg>
-          <div class="zoom-controls">
-            <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
-            <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
-            <button type="button" id="zoomReset" aria-label="Reset view" title="Reset view">&#8634;</button>
+        <div class="map-col">
+          <div class="map-wrap">
+            <svg id="map" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="World map with pins marking Musk company land holdings. Scroll or pinch to zoom, drag to pan."></svg>
+            <div class="zoom-controls">
+              <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+              <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+              <button type="button" id="zoomReset" aria-label="Reset view" title="Reset view">&#8634;</button>
+            </div>
+            <div class="map-caption">EQUIRECTANGULAR &middot; <span>15</span> SITES &middot; <span id="capFiltered">15</span> SHOWN &middot; <span id="capZoom">1.0&times;</span></div>
+            <div class="tooltip" id="tooltip"></div>
           </div>
-          <div class="map-caption">EQUIRECTANGULAR &middot; <span>15</span> SITES &middot; <span id="capFiltered">15</span> SHOWN &middot; <span id="capZoom">1.0&times;</span></div>
-          <div class="tooltip" id="tooltip"></div>
+
+          <div class="sources-panel">
+            <div class="sources-head">
+              Official sources
+              <span class="sources-note">Government records, regulatory filings, and company statements only &mdash; no Wikipedia or crowdsourced sources.</span>
+            </div>
+            <div class="sources-grid">
+              <div class="source-group">
+                <div class="group-title">Federal &amp; regulatory</div>
+                <ul>
+                  <li><a href="https://www.sec.gov/cgi-bin/browse-edgar?CIK=0001318605" target="_blank" rel="noopener">SEC EDGAR &mdash; Tesla, Inc. filings</a><span class="tag">10-K / 8-K, CIK 0001318605</span></li>
+                  <li><a href="https://www.faa.gov/space/stakeholder_engagement/spacex_starship" target="_blank" rel="noopener">FAA Office of Commercial Space Transportation</a><span class="tag">Starship / Boca Chica licensing</span></li>
+                  <li><a href="https://www.nasa.gov/news-release/nasa-selects-spacex-to-begin-negotiations-for-use-of-historic-launch-pad/" target="_blank" rel="noopener">NASA &mdash; Kennedy Space Center</a><span class="tag">LC-39A lease agreement</span></li>
+                  <li><a href="https://www.patrick.spaceforce.mil/" target="_blank" rel="noopener">Space Launch Delta 45, U.S. Space Force</a><span class="tag">Cape Canaveral SLC-40</span></li>
+                  <li><a href="https://buffalobillion.ny.gov/riverbend" target="_blank" rel="noopener">Empire State Development &mdash; Buffalo Billion</a><span class="tag">RiverBend / Gigafactory New York</span></li>
+                  <li><a href="https://brandenburg.de/cms/detail.php/bb1.c.732543.de" target="_blank" rel="noopener">Landesregierung Brandenburg</a><span class="tag">Gigafactory Berlin-Brandenburg approvals</span></li>
+                </ul>
+              </div>
+              <div class="source-group">
+                <div class="group-title">County &amp; local property records</div>
+                <ul>
+                  <li><a href="https://www.cameroncad.org/Pages/PropertySearch" target="_blank" rel="noopener">Cameron Appraisal District, TX</a><span class="tag">Starbase</span></li>
+                  <li><a href="https://mclennancad.org/" target="_blank" rel="noopener">McLennan County Appraisal District, TX</a><span class="tag">McGregor Test Facility</span></li>
+                  <li><a href="https://traviscad.org/propertysearch/" target="_blank" rel="noopener">Travis Central Appraisal District, TX</a><span class="tag">Gigafactory Texas, Neuralink HQ</span></li>
+                  <li><a href="https://www.storeycounty.org/132/Assessor" target="_blank" rel="noopener">Storey County Assessor, NV</a><span class="tag">Gigafactory Nevada / TRIC</span></li>
+                  <li><a href="https://www.acassessor.org/" target="_blank" rel="noopener">Alameda County Assessor, CA</a><span class="tag">Fremont Factory</span></li>
+                  <li><a href="https://bastropcad.org/" target="_blank" rel="noopener">Bastrop Central Appraisal District, TX</a><span class="tag">The Boring Company</span></li>
+                  <li><a href="https://www.shelbycountytn.gov/1916/Assessor-of-Property" target="_blank" rel="noopener">Shelby County Assessor of Property, TN</a><span class="tag">xAI &ldquo;Colossus&rdquo;</span></li>
+                </ul>
+              </div>
+              <div class="source-group">
+                <div class="group-title">Company primary sources</div>
+                <ul>
+                  <li><a href="https://www.spacex.com/updates/" target="_blank" rel="noopener">SpaceX &mdash; official updates</a></li>
+                  <li><a href="https://ir.tesla.com/" target="_blank" rel="noopener">Tesla &mdash; investor relations</a></li>
+                  <li><a href="https://neuralink.com/" target="_blank" rel="noopener">Neuralink &mdash; official site</a></li>
+                  <li><a href="https://x.ai/" target="_blank" rel="noopener">xAI &mdash; official site</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="manifest">

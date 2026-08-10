@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Real Estate Manifest</title>
+    <meta name="description" content="Interactive world map of land and facilities owned or leased by Elon Musk's companies." />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="eyebrow">Land &amp; facilities &middot; public-record survey</div>
+        <h1>What Elon Musk's Companies Actually Own</h1>
+        <p class="dek">Every launch pad, gigafactory, and test range across SpaceX, Tesla, The Boring Company, Neuralink, and xAI &mdash; plotted from <b>public reporting</b>: county deed records, SEC filings, and local news. Pins distinguish outright <b>ownership</b> from leased government land and China's land-use-rights system. This is a representative survey, not a legal record &mdash; corporate real estate portfolios run deeper than what's publicly disclosed.</p>
+      </header>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="controls" id="controls">
+        <span class="group-label">Filter</span>
+      </div>
+
+      <div class="layout">
+        <div class="map-wrap">
+          <svg id="map" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="World map with pins marking Musk company land holdings. Scroll or pinch to zoom, drag to pan."></svg>
+          <div class="zoom-controls">
+            <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+            <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+            <button type="button" id="zoomReset" aria-label="Reset view" title="Reset view">&#8634;</button>
+          </div>
+          <div class="map-caption">EQUIRECTANGULAR &middot; <span>15</span> SITES &middot; <span id="capFiltered">15</span> SHOWN &middot; <span id="capZoom">1.0&times;</span></div>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+
+        <div class="manifest">
+          <div class="manifest-head">
+            <span>Site manifest</span>
+            <span id="manifestCount">15 / 15</span>
+          </div>
+          <div class="manifest-list" id="manifestList"></div>
+          <div class="pin-legend">
+            <span class="item"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="var(--muted)"/></svg> Owned</span>
+            <span class="item"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="var(--muted)" stroke-width="2"/></svg> Leased</span>
+            <span class="item"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="var(--muted)" fill-opacity="0.35" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="2.5 2"/></svg> Rights / banked</span>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <b>Sourcing note.</b> Acreage figures are approximate and drawn from news coverage (Reuters, Bloomberg, local outlets), county appraisal records, and company statements as of 2025 &mdash; they round and vary by source. &ldquo;Owned&rdquo; means public reporting indicates the company or a Musk-linked entity purchased the land or building. Gigafactory Shanghai sits on a 50-year land-use grant, standard for foreign investment in China, not fee-simple title. Government-leased launch sites (Cape Canaveral, Vandenberg) remain U.S. federal or state property. This map excludes personal residences and any non-public holdings.
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

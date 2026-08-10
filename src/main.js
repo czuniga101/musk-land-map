@@ -163,7 +163,9 @@ const gPins = document.createElementNS(svgns, 'g')
 svg.appendChild(gPins)
 
 const tooltip = document.getElementById('tooltip')
+const sitePopup = document.getElementById('sitePopup')
 const mapWrap = document.querySelector('.map-wrap')
+const POPUP_W = 280
 
 function pinVisible(d) {
   if (!state.companies[d.company]) return false
@@ -227,6 +229,45 @@ function showTooltip(d, g) {
   tooltip.classList.add('show')
 }
 
+// Click-to-open info card, anchored to the pin. Separate from the hover tooltip
+// (which only ever shows the name) so the full status/location/footprint/note is
+// reachable without scrolling to the sidebar -- important on mobile, where the
+// manifest sits below the map instead of beside it.
+function showSitePopup(d) {
+  const g = pinEls[d.id]
+  const pinRect = g.getBoundingClientRect()
+  const wrapRect = mapWrap.getBoundingClientRect()
+  const co = COMPANIES[d.company]
+
+  sitePopup.innerHTML =
+    `<div class="popup-head"><div class="popup-title">${d.name}</div>` +
+      `<button type="button" class="popup-close" aria-label="Close">&times;</button></div>` +
+    `<div class="popup-co"><span class="dot" style="background:${co.color}"></span>${co.label}<span class="popup-badge">${STATUS_LABEL[d.status]}</span></div>` +
+    `<div class="popup-loc">${d.loc}</div>` +
+    `<div class="popup-row"><span class="k">Footprint</span><span class="v">${d.size}</span></div>` +
+    `<div class="popup-note">${d.note}</div>`
+
+  const centerX = pinRect.left - wrapRect.left + pinRect.width / 2
+  const pinTop = pinRect.top - wrapRect.top
+  const left = Math.min(Math.max(centerX - POPUP_W / 2, 8), wrapRect.width - POPUP_W - 8)
+  sitePopup.style.left = left + 'px'
+
+  const popupH = sitePopup.offsetHeight || 160
+  sitePopup.style.top = pinTop > popupH + 24
+    ? (pinTop - popupH - 14) + 'px'
+    : (pinTop + 18) + 'px'
+
+  sitePopup.classList.add('show')
+}
+
+function hideSitePopup() {
+  sitePopup.classList.remove('show')
+}
+
+sitePopup.addEventListener('click', (e) => {
+  if (e.target.closest('.popup-close') && state.activeId) selectSite(state.activeId)
+})
+
 // ---------- zoom & pan ----------
 // The whole map lives in one 1000x500 coordinate space, so "zooming" just means
 // shrinking the SVG viewBox (and re-centering it) rather than transforming a nested group.
@@ -247,6 +288,7 @@ function clampPan() {
 function applyView() {
   svg.setAttribute('viewBox', `${view.x.toFixed(2)} ${view.y.toFixed(2)} ${view.w.toFixed(2)} ${view.h.toFixed(2)}`)
   tooltip.classList.remove('show')
+  sitePopup.classList.remove('show')
   const zoomLevel = W / view.w
   capZoom.textContent = zoomLevel.toFixed(1) + '×'
   zoomOutBtn.disabled = view.w >= VIEW_MAX_W
@@ -346,6 +388,16 @@ svg.addEventListener('wheel', (e) => {
   const factor = Math.exp(e.deltaY * sensitivity)
   zoomAtDirect(px, py, factor)
 }, { passive: false })
+
+svg.addEventListener('click', (e) => {
+  if (suppressClick) return
+  if (e.target.closest && e.target.closest('.pin')) return
+  if (state.activeId) selectSite(state.activeId)
+})
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && state.activeId) selectSite(state.activeId)
+})
 
 svg.addEventListener('dblclick', (e) => {
   if (e.target.closest && e.target.closest('.pin')) return
@@ -475,8 +527,13 @@ function selectSite(id, fromList) {
   state.activeId = state.activeId === id ? null : id
   Object.keys(pinEls).forEach((k) => pinEls[k].classList.toggle('selected', k === state.activeId))
   Object.keys(rowEls).forEach((k) => rowEls[k].classList.toggle('active', k === state.activeId))
-  if (state.activeId && rowEls[state.activeId] && !fromList) {
-    rowEls[state.activeId].scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  if (state.activeId) {
+    showSitePopup(SITES.find((s) => s.id === state.activeId))
+    if (rowEls[state.activeId] && !fromList) {
+      rowEls[state.activeId].scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }
+  } else {
+    hideSitePopup()
   }
 }
 

@@ -227,8 +227,9 @@ h1{
   background:var(--panel-2);
   border:1px solid var(--line);
   position:relative;
-  overflow:hidden;
+  overflow:visible;
 }
+.map-wrap svg{overflow:hidden;}
 .map-wrap svg{display:block;width:100%;height:auto;touch-action:none;cursor:grab;}
 .map-wrap svg.panning{cursor:grabbing;}
 
@@ -314,6 +315,73 @@ h1{
 }
 .tooltip.show{opacity:1;}
 .tooltip .co{color:var(--muted-2);margin-left:6px;}
+
+.site-popup{
+  position:absolute;
+  width:280px;
+  max-width:calc(100% - 16px);
+  background:var(--bg-elevated);
+  border:1px solid var(--line-strong);
+  box-shadow:0 14px 32px rgba(0,0,0,0.4);
+  padding:12px 14px 14px;
+  color:var(--ink);
+  z-index:7;
+  opacity:0;
+  transform:translateY(-6px);
+  pointer-events:none;
+  transition:opacity .12s ease, transform .12s ease;
+}
+.site-popup.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.site-popup .popup-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.site-popup .popup-title{font-family:var(--font-mono);font-weight:700;font-size:14px;line-height:1.35;flex:1;}
+.site-popup .popup-close{
+  flex:none;
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+  padding:0;
+  margin:-2px -2px 0 0;
+}
+.site-popup .popup-close:hover{color:var(--accent);}
+.site-popup .popup-co{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--muted-2);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  margin-bottom:8px;
+}
+.site-popup .popup-co .dot{width:7px;height:7px;border-radius:50%;flex:none;}
+.site-popup .popup-badge{
+  font-family:var(--font-mono);
+  font-size:9.5px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--muted-2);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:1px 5px;
+  margin-left:auto;
+  flex:none;
+}
+.site-popup .popup-loc{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.site-popup .popup-row{display:flex;gap:6px;font-size:12.5px;margin-bottom:6px;}
+.site-popup .popup-row .k{
+  font-family:var(--font-mono);
+  font-size:10.5px;
+  text-transform:uppercase;
+  color:var(--muted-2);
+  min-width:64px;
+  flex:none;
+  padding-top:1px;
+}
+.site-popup .popup-note{font-size:12.5px;line-height:1.5;color:var(--muted);margin-top:2px;padding-top:8px;border-top:1px dashed var(--line);}
 
 /* ---------- official sources ---------- */
 .sources-panel{

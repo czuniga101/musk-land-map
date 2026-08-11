@@ -173,13 +173,12 @@ function pinVisible(d) {
   return true
 }
 
-let suppressClick = false
-
 const pinEls = {}
 SITES.forEach((d) => {
   const xy = project(d.lon, d.lat)
   const g = document.createElementNS(svgns, 'g')
   g.setAttribute('class', 'pin')
+  g.dataset.id = d.id
   g.setAttribute('transform', `translate(${xy[0].toFixed(1)},${xy[1].toFixed(1)})`)
 
   const halo = document.createElementNS(svgns, 'circle')
@@ -211,10 +210,6 @@ SITES.forEach((d) => {
 
   g.addEventListener('mouseenter', () => showTooltip(d, g))
   g.addEventListener('mouseleave', () => tooltip.classList.remove('show'))
-  g.addEventListener('click', () => {
-    if (suppressClick) return
-    selectSite(d.id)
-  })
 
   gPins.appendChild(g)
   pinEls[d.id] = g
@@ -389,18 +384,16 @@ svg.addEventListener('wheel', (e) => {
   zoomAtDirect(px, py, factor)
 }, { passive: false })
 
-svg.addEventListener('click', (e) => {
-  if (suppressClick) return
-  if (e.target.closest && e.target.closest('.pin')) return
-  if (state.activeId) selectSite(state.activeId)
-})
-
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && state.activeId) selectSite(state.activeId)
 })
 
 svg.addEventListener('dblclick', (e) => {
-  if (e.target.closest && e.target.closest('.pin')) return
+  // e.target can't be trusted here: svg.setPointerCapture() (below) retargets the
+  // synthesized click/dblclick events to the svg itself for the whole gesture, so we
+  // do a real hit-test at the cursor position instead.
+  const real = document.elementFromPoint(e.clientX, e.clientY)
+  if (real && real.closest && real.closest('.pin')) return
   e.preventDefault()
   const [px, py] = clientToSvg(e.clientX, e.clientY)
   zoomAt(px, py, 1 / 2.2)
@@ -416,6 +409,11 @@ let dragStart = null
 let dragOrigin = null
 let dragMoved = false
 let pinch = null
+// svg.setPointerCapture() below (needed so drag/pinch keep tracking outside the
+// element's bounds) also retargets the eventual pointerup/click to the svg itself,
+// so real hit-testing for "which pin, if any, did this gesture start on" has to
+// happen here at pointerdown, before capture takes effect -- see endPointer().
+let pointerDownPinId = null
 
 svg.addEventListener('pointerdown', (e) => {
   stopAnim()
@@ -425,6 +423,8 @@ svg.addEventListener('pointerdown', (e) => {
     dragStart = [e.clientX, e.clientY]
     dragOrigin = [view.x, view.y]
     dragMoved = false
+    const pinG = e.target.closest && e.target.closest('.pin')
+    pointerDownPinId = pinG ? pinG.dataset.id : null
   } else if (activePointers.size === 2) {
     const pts = [...activePointers.values()]
     pinch = {
@@ -470,11 +470,13 @@ function endPointer(e) {
   activePointers.delete(e.pointerId)
   if (activePointers.size < 2) pinch = null
   if (activePointers.size === 0) {
-    if (dragMoved) suppressClick = true
+    if (!dragMoved) {
+      if (pointerDownPinId) selectSite(pointerDownPinId)
+      else if (state.activeId) selectSite(state.activeId)
+    }
     dragStart = null
+    pointerDownPinId = null
     svg.classList.remove('panning')
-    // let the click event (which fires right after pointerup) see suppressClick, then clear it
-    setTimeout(() => { suppressClick = false }, 0)
   }
 }
 svg.addEventListener('pointerup', endPointer)
